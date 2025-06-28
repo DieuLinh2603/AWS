@@ -18,25 +18,32 @@ app.get('/', async (req, res) => {
     const totalPopulation = rows.reduce((sum, row) => sum + row.population, 0);
     const privateIP = getPrivateIP();
 
-    let html = `<h1>Private IP: ${privateIP}</h1>`;
-    html += `<h2>Tổng dân số: ${totalPopulation.toLocaleString()}</h2>`;
-    html += `<table border="1"><tr><th>ID</th><th>Tên TP</th><th>Quốc gia</th><th>Dân số</th></tr>`;
+    let html = `
+      <h1>Private IP: ${privateIP}</h1>
+      <h2>Tổng dân số: ${totalPopulation.toLocaleString()}</h2>
+      <table border="1" cellpadding="8" cellspacing="0">
+        <tr><th>ID</th><th>Tên TP</th><th>Quốc gia</th><th>Dân số</th></tr>
+    `;
 
     rows.forEach(city => {
-      html += `<tr>
-        <td>${city.id}</td>
-        <td>${city.name}</td>
-        <td>${city.country}</td>
-        <td>${city.population.toLocaleString()}</td>
-      </tr>`;
+      html += `
+        <tr>
+          <td>${city.id}</td>
+          <td>${city.name}</td>
+          <td>${city.country}</td>
+          <td>${city.population.toLocaleString()}</td>
+        </tr>
+      `;
     });
 
     html += '</table>';
     res.send(html);
+
   } catch (err) {
     res.status(500).send('Lỗi kết nối hoặc truy vấn DB: ' + err.message);
   }
 });
+
 
 // Lấy IP nội bộ (Private IP)
 function getPrivateIP() {
